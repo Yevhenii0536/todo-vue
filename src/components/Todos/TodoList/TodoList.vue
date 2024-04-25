@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { TodoItemModel, TodoListFilterEnum } from "@/components/Todos";
 import { useTodos } from "@/composables/todo/useTodo";
 import Vuedraggable from 'vuedraggable'
-import TodoListItem from "@/components/Todos/TodoList/TodoListItem.vue";
 
 const {
   getTodosFromLocalStorage,
@@ -177,6 +176,7 @@ function onDragChange() {
   color: white;
   padding: 10px;
   border-radius: 4px;
+  z-index: 5;
 }
 
 .todo {
