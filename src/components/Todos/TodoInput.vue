@@ -29,11 +29,15 @@ const props = defineProps({
 const emit = defineEmits(['update:value', 'addTodo'])
 
 const onInput = (event: Event) => {
-  emit('update:value', (event.target as HTMLInputElement).value)
+  const value = (event.target as HTMLInputElement).value?.trim()
+
+  if (value) {
+    emit('update:value', value)
+  }
 }
 
 const onEnter = (event: KeyboardEvent) => {
-  const value = (event.target as HTMLInputElement).value
+  const value = (event.target as HTMLInputElement).value?.trim()
 
   if (event.key === 'Enter' && value) {
     emit('addTodo', value)

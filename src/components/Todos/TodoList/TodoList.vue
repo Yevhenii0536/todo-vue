@@ -20,7 +20,6 @@ onMounted(() => {
   filterTodos(getTodosFilterFromLocalStorage())
 
   setTimeout(() => {
-    console.log(todos.value)
     isLoading.value = false
   }, 300)
 })
@@ -116,7 +115,7 @@ function filterTodos(filter: TodoListFilterEnum) {
             @completeTodo="completeTodo"
           />
         </transition-group>
-              </div>
+      </div>
     </div>
 
     <todo-input

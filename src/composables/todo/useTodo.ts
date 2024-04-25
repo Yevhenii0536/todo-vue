@@ -1,6 +1,8 @@
-import {TodoItemModel, TodoListFilterEnum} from "@/components/Todos";
+import { TodoItemModel, TodoListFilterEnum } from "@/components/Todos";
+
 interface TodosComposition {
   getTodosFromLocalStorage: () => TodoItemModel[]
+  getTodoById: (todoId: string) => TodoItemModel
   updateTodosInLocalStorage: (todos: TodoItemModel[]) => void
   deleteTodoFromLocalStorage: (todo: string) => void
   setTodosFilterInLocalStorage: (filter: TodoListFilterEnum) => void
@@ -21,6 +23,11 @@ export function useTodos(): TodosComposition {
     }
   }
 
+  const getTodoById = (todoId: string) => {
+    const todos: TodoItemModel[] = getTodosFromLocalStorage()
+    return todos.find(td => td.id === todoId)
+  }
+
   const deleteTodoFromLocalStorage = (todoId: string) => {
     let todos: TodoItemModel[] = getTodosFromLocalStorage()
 
@@ -29,8 +36,10 @@ export function useTodos(): TodosComposition {
     updateTodosInLocalStorage(todos)
   }
 
-  const updateTodosInLocalStorage = (todos: TodoItemModel[]) => {
-    const todosToJSON = JSON.stringify(todos)
+  const updateTodosInLocalStorage = (todos?: TodoItemModel[]) => {
+    const values = todos ? todos : getTodosFromLocalStorage()
+
+    const todosToJSON = JSON.stringify(values)
 
     localStorage.setItem(TODOS, todosToJSON)
   }
@@ -47,6 +56,7 @@ export function useTodos(): TodosComposition {
 
   return {
     getTodosFromLocalStorage,
+    getTodoById,
     deleteTodoFromLocalStorage,
     updateTodosInLocalStorage,
     setTodosFilterInLocalStorage,

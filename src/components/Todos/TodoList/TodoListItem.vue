@@ -1,31 +1,48 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { TodoItemModel } from "@/components/Todos";
+import { TodoItemModel } from "@/components/Todos"
+import { useRouter } from "vue-router"
 
 const props = defineProps<{
   todo: TodoItemModel
 }>()
 
+const router = useRouter()
 const emit = defineEmits(['deleteTodo', 'completeTodo'])
-const isChecked = ref<boolean>(props.todo.isCompleted);
+const isChecked = ref<boolean>(props.todo.isCompleted)
 
 const toggleComplete = () => {
-  isChecked.value = !isChecked.value;
-  emit('completeTodo', props.todo.id, isChecked.value);
+  isChecked.value = !isChecked.value
+  emit('completeTodo', props.todo.id, isChecked.value)
+}
+
+const goToTodoDetails = () => {
+  router.push({ name: 'todo-details', params: { id: props.todo.id } })
 }
 </script>
 
 <template>
-  <div class="todo-item" :class="{ 'todo-item-completed': props.todo.isCompleted }">
+  <div
+      class="todo-item"
+      :class="{ 'todo-item-completed': props.todo.isCompleted }"
+      @click.stop.prevent="goToTodoDetails"
+  >
     <div class="todo-item__title">
-      <input type="checkbox" :checked="props.todo.isCompleted" @change="toggleComplete">
-      <span>{{ todo.title }}</span>
+      <input
+        type="checkbox"
+        :checked="props.todo.isCompleted"
+        @change.stop.prevent="toggleComplete"
+        @click.stop
+      >
+      <span>
+        {{ todo.title }}
+      </span>
     </div>
     <img
       class="cursor-pointer"
       src="@/assets/trash.svg"
       alt="trash"
-      @click="emit('deleteTodo', props.todo.id)"
+      @click.stop.prevent="emit('deleteTodo', props.todo.id)"
     >
   </div>
 </template>
