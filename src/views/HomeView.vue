@@ -3,7 +3,5 @@
 </script>
 
 <template>
-  <main>
-    <todo-list />
-  </main>
+  <todo-list/>
 </template>
