@@ -47,6 +47,7 @@ function turnOnEditMode() {
 }
 
 function turnOffEditMode() {
+  editedTitle.value = currentTodo.value?.title
   isEditing.value = false;
 }
 
