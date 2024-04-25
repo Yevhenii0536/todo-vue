@@ -4,3 +4,9 @@ export interface TodoItemModel {
   isCompleted: boolean
   createdAt: string
 }
+
+export enum TodoListFilterEnum {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}

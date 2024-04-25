@@ -26,10 +26,18 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:value']);
+const emit = defineEmits(['update:value', 'addTodo'])
 
 const onInput = (event: Event) => {
-  emit('update:value', (event.target as HTMLInputElement).value);
+  emit('update:value', (event.target as HTMLInputElement).value)
+}
+
+const onEnter = (event: KeyboardEvent) => {
+  const value = (event.target as HTMLInputElement).value
+
+  if (event.key === 'Enter' && value) {
+    emit('addTodo', value)
+  }
 }
 </script>
 
@@ -45,6 +53,7 @@ const onInput = (event: Event) => {
       class="input-field"
       :placeholder="props.placeholder"
       @input="onInput"
+      @keydown.enter.prevent="onEnter"
     />
     <span class="input-append cursor-pointer">
       <slot name="append"></slot>
