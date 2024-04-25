@@ -23,9 +23,9 @@ const goToTodoDetails = () => {
 
 <template>
   <div
-      class="todo-item"
-      :class="{ 'todo-item-completed': props.todo.isCompleted }"
-      @click.stop.prevent="goToTodoDetails"
+    class="todo-item"
+    :class="{ 'todo-item-completed': props.todo.isCompleted }"
+    @click.stop.prevent="goToTodoDetails"
   >
     <div class="todo-item__title">
       <input
