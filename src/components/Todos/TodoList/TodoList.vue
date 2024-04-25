@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue'
-import {v4 as uuidv4} from 'uuid';
-import {TodoItemModel, TodoListFilterEnum} from "@/components/Todos";
-import {useTodos} from "@/composables/todo/useTodo";
+import { onMounted, ref } from 'vue'
+import { v4 as uuidv4 } from 'uuid';
+import { TodoItemModel, TodoListFilterEnum } from "@/components/Todos";
+import { useTodos } from "@/composables/todo/useTodo";
+import Vuedraggable from 'vuedraggable'
+import TodoListItem from "@/components/Todos/TodoList/TodoListItem.vue";
 
 const {
   getTodosFromLocalStorage,
@@ -15,6 +17,8 @@ const isLoading = ref<boolean>(true)
 const myValue = ref<string>('')
 const todos = ref<TodoItemModel[]>([])
 const todoContainer = ref<HTMLElement | null>(null)
+const enabled = ref(true)
+const dragging = ref(false)
 
 onMounted(() => {
   filterTodos(getTodosFilterFromLocalStorage())
@@ -79,6 +83,10 @@ function filterTodos(filter: TodoListFilterEnum) {
       return;
   }
 }
+
+function onDragChange() {
+  updateTodos()
+}
 </script>
 
 <template>
@@ -105,16 +113,28 @@ function filterTodos(filter: TodoListFilterEnum) {
       </div>
 
       <div v-else ref="todoContainer" class="todo">
-        <transition-group name="todo-item" tag="div" class="todo-list">
-          <TodoListItem
-            v-for="todo in todos"
-            :key="todo.id"
-            :todo="todo"
-            :is-completed="todo.isCompleted"
-            @deleteTodo="deleteTodo"
-            @completeTodo="completeTodo"
-          />
-        </transition-group>
+        <vuedraggable
+          :key="todos.length"
+          :list="todos"
+          :disabled="!enabled"
+          item-key="name"
+          class="w-100 todo-list"
+          ghost-class="ghost"
+          @change="onDragChange"
+          @start="dragging = true"
+          @end="dragging = false"
+          handle=".draggable-handle"
+        >
+          <template #item="{ element }">
+            <TodoListItem
+              :key="element.id"
+              :todo="element"
+              class="draggable-handle cursor-pointer"
+              @deleteTodo="deleteTodo"
+              @completeTodo="completeTodo"
+            />
+          </template>
+        </vuedraggable>
       </div>
     </div>
 
